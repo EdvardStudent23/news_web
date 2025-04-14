@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Новини з усього світу</title>
+  <link rel="stylesheet" href="../style/index.css"> 
+</head>
+<body>
+  <header>
+    <h1>Останні новини</h1>
+    <div class="controls">
+      <!-- Пошук -->
+      <input type="text" id="search-input" placeholder="Пошук новин...">
+      <button id="search-btn">Шукати</button>
+      
+      <!-- Категорії -->
+      <div class="categories">
+        <button class="category-btn active" data-category="general">Головні</button>
+        <button class="category-btn" data-category="technology">Технології</button>
+        <button class="category-btn" data-category="sports">Спорт</button>
+        <button class="category-btn" data-category="business">Бізнес</button>
+        <button class="category-btn" data-category="health">Здоров'я</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="news-container" class="news-grid">
+      <!-- тут будуть новини -->
+    </div>
+    <button id="load-more" class="load-more-btn">Завантажити ще</button>
+  </main>
+
+  <footer>
+    <p>Сайт створено з використанням NewsAPI</p>
+  </footer>
+
+  <script>
+    // конфігурація
+    const API_KEY = 'c58aeb66990b4c45a3455fb28c0846a9'; 
+    let currentCategory = 'general';
+    let currentPage = 1;
+    let currentQuery = '';
+
+    // Елементи DOM
+    const newsContainer = document.getElementById('news-container');
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    const searchInput = document.getElementById('search-input');
+    const searchBtn = document.getElementById('search-btn');
+    const loadMoreBtn = document.getElementById('load-more');
+
+    // завантаження новин
+    async function fetchNews() {
+      try {
+        let url;
+        if (currentQuery) {
+          url = `https://newsapi.org/v2/everything?q=${currentQuery}&page=${currentPage}&apiKey=${API_KEY}`;
+        } else {
+          url = `https://newsapi.org/v2/top-headlines?country=ua&category=${currentCategory}&page=${currentPage}&apiKey=${API_KEY}`;
+        }
+
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.articles || [];
+      } catch (error) {
+        console.error('Помилка завантаження новин:', error);
+        return [];
+      }
+    }
+
+    // відображення новин
+    async function displayNews() {
+      const articles = await fetchNews();
+      if (articles.length === 0) {
+        newsContainer.innerHTML = '<p>Новини не знайдені. Спробуйте інший запит.</p>';
+        return;
+      }
+
+      articles.forEach(article => {
+        const newsCard = document.createElement('div');
+        newsCard.className = 'news-card';
+        newsCard.innerHTML = `
+          <img src="${article.urlToImage || 'https://via.placeholder.com/300x200'}" alt="${article.title}">
+          <h3>${article.title}</h3>
+          <p>${article.description || 'Опис відсутній'}</p>
+          <a href="${article.url}" target="_blank">Читати далі</a>
+        `;
+        newsContainer.appendChild(newsCard);
+      });
+    }
+
+    // обробники подій
+    categoryButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.dataset.category;
+        currentQuery = '';
+        currentPage = 1;
+        newsContainer.innerHTML = '';
+        displayNews();
+      });
+    });
+
+    searchBtn.addEventListener('click', () => {
+      currentQuery = searchInput.value.trim();
+      if (currentQuery) {
+        currentPage = 1;
+        newsContainer.innerHTML = '';
+        displayNews();
+      }
+    });
+
+    loadMoreBtn.addEventListener('click', () => {
+      currentPage++;
+      displayNews();
+    });
+
+    // ініціалізація
+    displayNews();
+  </script>
+</body>
+</html>
