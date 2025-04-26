@@ -1,0 +1,9 @@
+.NewsShortListBlock {
+    display: flex;
+}
+
+.NSLB-image {
+        width: 20%;
+        height: 20%;
+        object-fit: cover;
+}

@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import './Navbar.css';
 import logo from '../assets/logo.svg';
 
+
+
 export default function Navbar() {
   return (
     <nav className="navbar">
@@ -15,5 +17,6 @@ export default function Navbar() {
         <li><Link to="/registration">Registration</Link></li>
       </ul>
     </nav>
+    
   );
 }

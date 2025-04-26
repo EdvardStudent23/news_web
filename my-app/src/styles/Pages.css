@@ -4,3 +4,35 @@ body {
     padding: 0;
     font-family: Arial, sans-serif;
   }
+
+.news-zones {
+  display: flex;
+  width: 100%; /* Додаємо обмеження */
+  box-sizing: border-box; /* Усе враховується в ширину */
+  padding-right: 10px;
+}
+
+.news-zones .package-news {
+  align-items: center;
+}
+
+.news-zones .stack2-block {
+  display: flex;
+}
+
+.news-zones .stack2-block .NSLB .NewsShortListBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.StackBlock1 {
+  display: flex;
+  margin-top: 20px;
+}
+.StackBlock2 {
+  display: flex;
+  margin-top: 20px;
+}
+
+

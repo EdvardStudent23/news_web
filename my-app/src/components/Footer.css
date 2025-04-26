@@ -1,0 +1,13 @@
+.footer {
+    margin-top: 50px;
+}
+
+.footer-container{
+    display: flex;
+    justify-content: center;
+}
+
+.footer-copyright {
+    display: flex;
+    justify-content: center;
+}
