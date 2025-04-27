@@ -1,4 +1,4 @@
-.footer {
+/* .footer {
     margin-top: 50px;
 }
 
@@ -10,4 +10,125 @@
 .footer-copyright {
     display: flex;
     justify-content: center;
-}
+} */
+
+/* Footer general styles */
+.footer {
+    background-color: #212529;
+    color: #ffffff;
+    padding: 40px 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Footer container */
+  .footer-container {
+    display: flex;
+    /* flex-direction: row; */
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .row{
+    display: flex;
+    justify-content: space-evenly;
+    margin-right: 40px;
+
+  }
+  /* Social media section */
+  .footer-social {
+    display: flex;
+    /* flex-direction: row; */
+    /* align-items: center; */
+    gap: 20px;
+  }
+  
+  .social-link {
+    display: inline-block;
+  }
+  
+  .social-icon {
+
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease;
+  }
+  
+  .social-icon:hover {
+    transform: scale(1.2);
+  }
+  
+  /* Footer copyright */
+  .footer-link {
+    color: #0d6efd;
+    text-decoration: none;
+  }
+  
+  .footer-link:hover {
+    text-decoration: underline;
+  }
+  
+  .footer-copyright {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #adb5bd;
+  }
+  
+
+  /* Footer search section */
+  .footer-search-section {
+    display: flex;
+    padding-left: 20%;
+  }
+
+  .footer-search-section-mini {
+    display: flex;
+
+  }
+
+
+  .footer-search {
+    margin-top: 40px;
+  }
+  
+  .footer-search h5 {
+    color: #ffffff;
+    margin-bottom: 15px;
+  }
+  
+  .footer-search ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footer-search .nav-link {
+    color: #adb5bd;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 5px 0;
+  }
+  
+  .footer-search .nav-link:hover {
+    color: #ffffff;
+  }
+  
+  /* Newsletter form */
+  .footer-search form {
+    color: #adb5bd;
+  }
+  
+  .footer-search input[type="email"] {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .footer-search .btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+/* 
+  .form-control {
+    margin-left: 33%;
+  } */

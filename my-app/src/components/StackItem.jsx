@@ -27,3 +27,4 @@ export function StackItem4s () {
         <div><NewsShortListBlock /></div></>
     )
 }
+

@@ -19,9 +19,10 @@ export default function main() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         {/* <link rel="stylesheet" href="../style/main.css" /> */}
       <header><Navbar /></header>
-      
-      <main className='main'>
+      <div className='pagetitle'>
         <h1>Main</h1>
+      </div>
+      <main className='main'>
         {/* нижче мейн ділиться на декілька кусків
         перший кусок - головні новини. мають виглядати як на снн
         в 3 стовпці (стек) */}

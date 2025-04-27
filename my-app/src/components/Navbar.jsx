@@ -15,6 +15,7 @@ export default function Navbar() {
         <li><Link to="/business">Business</Link></li>
         <li><Link to="/crypto">Crypto</Link></li>
         <li><Link to="/registration">Registration</Link></li>
+        <li><Link to="/signin">SignIn</Link></li>
       </ul>
     </nav>
     

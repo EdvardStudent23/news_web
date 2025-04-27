@@ -5,6 +5,25 @@ body {
     font-family: Arial, sans-serif;
   }
 
+.pagetitle {
+  font-size: 8px;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+  text-align: center;
+  background: linear-gradient(to right, rgba(250, 201, 132, 0.5), rgba(217, 244, 143, 0.5));
+  padding: 20px 30px;
+  /* border-radius: 15px; */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  width: 100%;
+}
+
+.main {
+  margin: 40px;
+}
+
 .news-zones {
   display: flex;
   width: 100%; /* Додаємо обмеження */
@@ -13,11 +32,9 @@ body {
 }
 
 .news-zones .package-news {
-  align-items: center;
-}
-
-.news-zones .stack2-block {
   display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 .news-zones .stack2-block .NSLB .NewsShortListBlock {

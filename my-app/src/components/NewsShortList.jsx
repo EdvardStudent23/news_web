@@ -2,9 +2,9 @@ export default function NewsShortList () {
     return (
         <div className="package-short-news">
             <ul>
-            <li>News 1 short topic link</li>
-            <li>News 2 short topic link</li>
-            <li>News 3 short topic link</li>
+                <li><a href="#!" className="news-link">News 1 short topic link</a></li>
+                <li><a href="#!" className="news-link">News 2 short topic link</a></li>
+                <li><a href="#!" className="news-link">News 3 short topic link</a></li>
             </ul>
         </div>
     )
@@ -16,12 +16,12 @@ export function NewsShortList6 () {
     return (
         <div className="package-short-news">
             <ul>
-            <li>News 1 short topic link</li>
-            <li>News 2 short topic link</li>
-            <li>News 3 short topic link</li>
-            <li>News 4 short topic link</li>
-            <li>News 5 short topic link</li>
-            <li>News 6 short topic link</li>
+                <li><a href="#!" className="news-link">News 1 short topic link</a></li>
+                <li><a href="#!" className="news-link">News 2 short topic link</a></li>
+                <li><a href="#!" className="news-link">News 3 short topic link</a></li>
+                <li><a href="#!" className="news-link">News 4 short topic link</a></li>
+                <li><a href="#!" className="news-link">News 5 short topic link</a></li>
+                <li><a href="#!" className="news-link">News 6 short topic link</a></li>
             </ul>
         </div>
     )
