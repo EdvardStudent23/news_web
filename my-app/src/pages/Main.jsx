@@ -15,7 +15,7 @@ export default function Main() {
       try {
         setLoading(true);
         const res = await fetch(
-          `https://newsapi.org/v2/top-headlines?country=us&page=${page}&pageSize=12&apiKey=3dd7a580e2284da68968591ea8d110ff`
+          `https://newsapi.org/v2/top-headlines?country=us&page=${page}&pageSize=12&apiKey=17127349ad304326915fa7bd8837244d`
         );
         const data = await res.json();
         setArticles(prev => [...prev, ...data.articles]);

@@ -4,8 +4,6 @@ import Sport from './pages/Sport';
 import Politics from './pages/Politics';
 import Business from './pages/Business';
 import Crypto from './pages/Crypto';
-import Registration from './pages/Registration';
-import SignIn from './pages/SignIn';
 import './App.css';
 
 function App() {
@@ -17,8 +15,6 @@ function App() {
         <Route path="/politics" element={<Politics />} />
         <Route path="/business" element={<Business />} />
         <Route path="/crypto" element={<Crypto />} />
-        <Route path="/registration" element={<Registration />} />
-        <Route path="/signin" element={<SignIn />} />
       </Routes>
     </Router>
   );
