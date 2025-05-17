@@ -1,16 +1,23 @@
+.navbar-wrapper {
+  width: 100vw;
+  overflow-x: hidden;
+}
+
 .navbar {
   background: linear-gradient(to right, rgba(250, 201, 132, 0.5), rgba(217, 244, 143, 0.5));
-  padding: 0 20px; /* Змінив padding, забрав зайву внутрішню відстань */
-  height: 100px; /* Фіксована висота для прямокутного ховера */
+  padding: 0 5%;
+  height: 80px;
   display: flex;
   align-items: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  /* margin: 20px auto; тримаємо лише зовнішній відступ */
-  /* border-radius: 15px; якщо треба скруглення тільки країв */
+  width: 100%;
+  position: relative;
+  max-width: 100vw;
 }
 
 .navbar-container {
   width: 100%;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -21,17 +28,28 @@
   align-items: center;
   text-decoration: none;
   height: 100%;
+  z-index: 11;
 }
 
 .logo {
   height: 50px;
   width: auto;
+  transition: transform 0.3s;
+}
+
+.logo:hover {
+  transform: scale(1.05);
 }
 
 .navbar-links {
+  display: flex;
+  transition: all 0.3s ease;
+}
+
+.navbar-links ul {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: clamp(10px, 2vw, 30px);
   margin: 0;
   padding: 0;
   height: 100%;
@@ -39,23 +57,141 @@
 
 .navbar-links li {
   height: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .navbar-links a {
   display: flex;
   align-items: center;
   height: 100%;
-  padding: 0 20px; /* рівний відступ по горизонталі */
+  padding: 0 clamp(5px, 1vw, 20px);
   text-decoration: none;
   color: #000;
   font-weight: bold;
-  font-size: 18px;
+  font-size: clamp(14px, 1.5vw, 18px);
   border-radius: 10px;
-  transition: background 0.3s, color 0.3s;
+  transition: all 0.3s;
+  white-space: nowrap;
 }
 
 .navbar-links a:hover {
   background: linear-gradient(to right, rgb(255, 128, 0), rgb(251, 255, 0));
   color: white;
-  border-radius: 0; /* прибираємо скруглення при ховері для прямокутника */
+}
+
+/* Бургер-меню */
+.burger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 25px;
+  cursor: pointer;
+  z-index: 11;
+  position: relative;
+}
+
+.burger-menu span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background-color: #000;
+  transition: all 0.3s ease;
+  border-radius: 3px;
+}
+
+.burger-menu.open span {
+  background-color: #fff;
+}
+
+.burger-menu.open span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.burger-menu.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger-menu.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Мобільна версія */
+@media (max-width: 768px) {
+  .navbar {
+    height: 80px;
+    padding: 0 5%;
+  }
+  
+  .burger-menu {
+    display: flex;
+  }
+  
+  .navbar-links {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, rgba(250, 201, 132, 0.95), rgba(217, 244, 143, 0.95));
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(100%);
+    z-index: 10;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+  }
+  
+  .navbar-links.active {
+    transform: translateX(0);
+  }
+  
+  .navbar-links ul {
+    flex-direction: column;
+    gap: 25px;
+    height: auto;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .navbar-links li {
+    height: auto;
+    width: 100%;
+  }
+  
+  .navbar-links a {
+    height: auto;
+    padding: 15px;
+    font-size: 1.2rem;
+    justify-content: center;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .navbar-links a:hover {
+    background: linear-gradient(135deg, rgb(255, 128, 0), rgb(251, 255, 0));
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.navbar-links.active {
+  animation: slideIn 0.3s ease-out forwards;
 }

@@ -83,7 +83,7 @@ export default function Main() {
                     rel="noopener noreferrer"
                     className="read-more"
                   >
-                    Читати далі →
+                    Read more →
                   </a>
                 </div>
               </div>
