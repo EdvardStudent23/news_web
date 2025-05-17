@@ -53,7 +53,7 @@ export default function Footer() {
 
           {/* Copyright & Links */}
           <div className="legal-section">
-            <p>© 2025 NewsWebsite</p>
+            <p>© 2025 HermesNews</p>
             <div className="legal-links">
               <a href="#privacy">Privacy</a>
               <a href="#terms">Terms</a>
