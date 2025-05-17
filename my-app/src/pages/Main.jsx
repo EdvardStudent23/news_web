@@ -1,147 +1,110 @@
 import { Helmet } from 'react-helmet';
+import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
-import Newsblock from '../components/Newsblock';
-import NewsShortList from '../components/NewsShortList';
-import NewsShortListBlock from '../components/NewsShortListBlock';
-import '../styles/Pages.css'
-import StackItem from '../components/StackItem';
-import {StackItem3s} from '../components/StackItem';
+import '../styles/Pages.css';
 import Footer from '../components/Footer';
 
+export default function Main() {
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
 
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(
+          `https://newsapi.org/v2/top-headlines?country=us&page=${page}&pageSize=12&apiKey=3dd7a580e2284da68968591ea8d110ff`
+        );
+        const data = await res.json();
+        setArticles(prev => [...prev, ...data.articles]);
+        setTotalResults(data.totalResults);
+      } catch (err) {
+        console.error('Error loading news:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-export default function main() {
+    fetchNews();
+  }, [page]);
+
+  const getRandomSize = () => {
+    const sizes = ['small', 'medium', 'large'];
+    return sizes[Math.floor(Math.random() * sizes.length)];
+  };
+
+  const getRandomType = () => {
+    const types = ['default', 'highlight', 'analysis', 'live'];
+    return types[Math.floor(Math.random() * types.length)];
+  };
+
+  const loadMore = () => {
+    setPage(prev => prev + 1);
+  };
+
   return (
     <>
-      <Helmet><title>Main</title></Helmet>
-      <title>Main</title>
-        <meta charSet="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        {/* <link rel="stylesheet" href="../style/main.css" /> */}
+      <Helmet>
+        <title>Main</title>
+      </Helmet>
       <header><Navbar /></header>
-      <div className='pagetitle'>
-        <h1>Main</h1>
-      </div>
-      <main className='main'>
-        {/* нижче мейн ділиться на декілька кусків
-        перший кусок - головні новини. мають виглядати як на снн
-        в 3 стовпці (стек) */}
-
-        <div className='main-container'>
-          <div className='news-zone-wrapper'></div>
-            <div className='news-zones'>
-              {/* стеки */}
-              {/* стек 1 */}
-            
-              <div className="stack">
-                <div className="stack-inner">
-                  <div className="container-title">
-                    {/* Заголовок */}
-                  </div>
-
-                  <div className="container-lead-package">
-                    <div className="package-news">
-                      <div><Newsblock/></div>
-                      <div><NewsShortList/></div>
-
-                      <div class='stack2-block'>
-                        <div class='NSLB'><NewsShortListBlock/></div>
-                        <div class='NSLB'><NewsShortListBlock/></div>
-                        <div class='NSLB'><NewsShortListBlock/></div>
-                      
-                        {/* <div className='NewsShortListBlock'>
-                          <div><NewsShortListBlock/></div>
-                        </div>
-                        <div className='NewsShortListBlock'>
-                          <div><NewsShortListBlock/></div>
-                        </div>
-                        <div className='NewsShortListBlock'>
-                          <div><NewsShortListBlock/></div>
-                        </div> */}
-                      </div>
-
-                      {/* <div className='news-block'>
-                        <img src="" alt="package-news-image" />
-
-                        <div className="package-news-content">
-                          {/* Головна новина */}
-                        {/* </div>
-                      </div>  */}
-          
-                    </div>
-                  </div>
+      
+      <main className="main-content">
+        <div className="chaotic-news-container">
+          <div className="chaotic-grid">
+            {articles.map((article, index) => (
+              <div 
+                key={index} 
+                className={`news-card ${getRandomSize()} ${getRandomType()}`}
+              >
+                {article.urlToImage && (
+                  <img 
+                    src={article.urlToImage} 
+                    alt={article.title} 
+                    className="news-image" 
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                )}
+                <div className="news-content">
+                  {Math.random() > 0.5 && (
+                    <span className="news-label">
+                      {getRandomType().toUpperCase()}
+                    </span>
+                  )}
+                  <h3>{article.title}</h3>
+                  <p>{article.description}</p>
+                  <a 
+                    href={article.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="read-more"
+                  >
+                    Читати далі →
+                  </a>
                 </div>
               </div>
+            ))}
+          </div>
 
-              {/* стек 2 */}
-              <div className="stack">
-                <div className="stack-inner">
-
-                  {/* внутрішня частина стека 2 */}
-                  <div className="container-lead-package">
-                    <div className="package-news">
-                      {/* внутрішня частина */}
-
-                      <div><Newsblock/></div>
-                      <div><NewsShortList/></div>
-                      <div><Newsblock/></div>
-                      
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* стек 3 */}
-              <div className="stack">
-                <div className="stack-inner">
-
-
-                  {/* внутрішня частина стека 3 */}
-                  <div className="container-lead-package">
-                    <div className="package-news">
-                      {/* внутрішня частина */}
-
-                      <div><Newsblock/></div>
-                      <div><Newsblock/></div>
-                      <div className='stack3-block'>
-                        <div className='NewsShortListBlock'>
-                          <div><NewsShortListBlock/></div>
-                        </div>
-                        <div className='NewsShortListBlock'>
-                          <div><NewsShortListBlock/></div>
-                        </div>
-                        <div className='NewsShortListBlock'>
-                          <div><NewsShortListBlock/></div>
-                        </div>
-                      </div>
-                      
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
+          {articles.length < totalResults && (
+            <div className="load-more-container">
+              <button 
+                onClick={loadMore} 
+                className="load-more-btn"
+                disabled={loading}
+              >
+                {loading ? 'Завантаження...' : 'Завантажити більше'}
+              </button>
             </div>
+          )}
         </div>
-
-        <div className='StackBlock1'>
-          <div className='st1'><StackItem3s/></div>
-          <div className='st2'><StackItem/></div>
-          <div className='st3'><StackItem3s/></div>
-        </div>
-
-        <div className='StackBlock2'>
-          <div className='st1'><StackItem3s/></div>
-          <div className='st2'><StackItem3s/></div>
-          <div className='st3'><StackItem3s/></div>
-        </div>
-
       </main>
-      <Footer/>
+
+      <Footer />
     </>
   );
 }
-
-
-
-// напиши ті блоки що далі
