@@ -5,14 +5,12 @@
 
 .navbar {
   background: linear-gradient(to right, rgba(250, 201, 132, 0.5), rgba(217, 244, 143, 0.5));
-  padding: 0 5%;
   height: 80px;
+  padding: 0 5%;
   display: flex;
   align-items: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  position: relative;
-  max-width: 100vw;
+  width: 90%;
 }
 
 .navbar-container {
