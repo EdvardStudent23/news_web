@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import '../styles/Pages.css';
 import Footer from '../components/Footer';
 import NewsGrid from '../components/Newsblock';
+const key = process.env.REACT_APP_MY_GLOBAL_KEY;
 
 export default function Main() {
   const [articles, setArticles] = useState([]);
@@ -60,7 +61,7 @@ export default function Main() {
         `sortBy=publishedAt&` +
         `page=${page}&` +
         `pageSize=50&` +
-        `apiKey=17127349ad304326915fa7bd8837244d`
+        `apiKey=${key}`
       );
 
       const data = await res.json();
