@@ -1,142 +1,171 @@
 import { Helmet } from 'react-helmet';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Navbar from '../components/Navbar';
 import '../styles/Pages.css';
 import Footer from '../components/Footer';
+import NewsGrid from '../components/Newsblock';
+const key = process.env.REACT_APP_MY_GLOBAL_KEY;
 
-export default function Politics() {
+
+export default function NewsPage() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
-  const mainContentRef = useRef(null);
+  const [seenUrls, setSeenUrls] = useState(new Set());
+  const [dateRange, setDateRange] = useState({
+    startDate: null,
+    endDate: null
+  });
+  const [hasMore, setHasMore] = useState(true);
+  const [politicalTopic, setPoliticalTopic] = useState('general');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const politicalTopics = [
+    'general', 'elections', 'legislation', 'foreign_policy', 
+    'government', 'leaders', 'diplomacy', 'parliament'
+  ];
+
 
   useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch(
-          `https://newsapi.org/v2/top-headlines?category=general&country=us&page=${page}&pageSize=12&apiKey=17127349ad304326915fa7bd8837244d`
-        );
-        const data = await res.json();
-        
-        const newArticles = data.articles.filter(newArticle => 
-          !articles.some(existingArticle => existingArticle.url === newArticle.url)
-        );
-        
-        setArticles(prev => [...prev, ...newArticles]);
-        setTotalResults(data.totalResults);
-      } catch (err) {
-        console.error('Error loading news:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 29);
+    
+    setDateRange({
+      startDate,
+      endDate
+    });
+  }, []);
 
-    fetchNews();
-  }, [page]);
-
-  // Функція для визначення типу новини
-  const getArticleType = (article) => {
-    const content = (article.title + ' ' + (article.description || '')).toLowerCase();
-    if (content.includes('election')) return 'election';
-    if (content.includes('government') || content.includes('president')) return 'government';
-    if (content.includes('policy') || content.includes('law') || content.includes('bill')) return 'policy';
-    return 'politics';
+  const formatDate = (date) => {
+    if (!date) return '';
+    return date.toISOString().split('T')[0];
   };
 
-  // Фільтрація політичних новин
-  const politicsArticles = articles.filter(article => 
-    article.title?.toLowerCase().includes('politic') || 
-    article.description?.toLowerCase().includes('politic') ||
-    /election|government|president|congress|senate|minister|diplomacy|foreign policy|law|bill|vote/i.test(
-      (article.title || '') + (article.description || '')
-  ));
+  const formatPublishedDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
+
+  const fetchNews = useCallback(async () => {
+    if (!dateRange.startDate || !dateRange.endDate || loading || !hasMore) return;
+    
+    try {
+      setLoading(true);
+      const politicalQuery = "politics";
+      const topicQuery = politicalTopic !== 'general' ? `${politicalTopic} ${politicalQuery}` : politicalQuery;
+      const finalQuery = searchQuery 
+        ? `${topicQuery} ${searchQuery}`
+        : topicQuery;
+      
+      let apiUrl = `https://newsapi.org/v2/everything`;
+      apiUrl += `?q=${encodeURIComponent(finalQuery)}` +
+                `&from=${formatDate(dateRange.startDate)}` +
+                `&to=${formatDate(dateRange.endDate)}` +
+                `&sortBy=publishedAt` +
+                `&page=${page}` +
+                `&pageSize=20` +
+                `&apiKey=${key}`;
+      
+      const res = await fetch(apiUrl);
+      const data = await res.json();
+      
+      if (data.status === 'error') {
+        console.error('API Error:', data.message);
+        setHasMore(false);
+        return;
+      }
+      const newArticles = (data.articles || [])
+        .filter(article => !seenUrls.has(article.url))
+        .filter(article => article.title && article.url)
+        .filter(article => {
+          const keywords = ['politic', 'govern', 'election', 'president', 'minister', 'parliament', 'democrat', 'republican', 'law', 'vote'];
+          const content = (article.title + ' ' + (article.description || '')).toLowerCase();
+          return keywords.some(keyword => content.includes(keyword));
+        });
+
+      if (newArticles.length === 0 && page === 1) {
+        const newEndDate = new Date(dateRange.startDate);
+        newEndDate.setDate(newEndDate.getDate() - 1);
+        
+        const newStartDate = new Date(newEndDate);
+        newStartDate.setDate(newStartDate.getDate() - 14);
+        
+        setDateRange({
+          startDate: newStartDate,
+          endDate: newEndDate
+        });
+        setPage(1);
+      } else {
+        const newSeenUrls = new Set(seenUrls);
+        newArticles.forEach(article => newSeenUrls.add(article.url));
+        setSeenUrls(newSeenUrls);
+        setArticles(prev => page === 1 ? newArticles : [...prev, ...newArticles]);
+        setTotalResults(data.totalResults);
+        setHasMore(newArticles.length > 0);
+      }
+    } catch (err) {
+      console.error('Error loading political news:', err);
+      setHasMore(false);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, dateRange, seenUrls, loading, hasMore, politicalTopic, searchQuery]);
+
+  useEffect(() => {
+    fetchNews();
+  }, [fetchNews, page, dateRange.startDate, dateRange.endDate, politicalTopic, searchQuery]);
+
+  const loadMore = () => {
+    setPage(prev => prev + 1);
+  };
+
+  const handleTopicChange = (newTopic) => {
+    setPoliticalTopic(newTopic);
+    setPage(1);
+    setArticles([]);
+    setSeenUrls(new Set());
+  };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    setPage(1);
+    setArticles([]);
+    setSeenUrls(new Set());
+  };
 
   return (
     <>
       <Helmet>
-        <title>Political News</title>
+        <title>Political News Hub - {politicalTopic.charAt(0).toUpperCase() + politicalTopic.slice(1)}</title>
       </Helmet>
-      <header><Navbar /></header>
+      <header>
+        <Navbar 
+          categories={politicalTopics} 
+          activeCategory={politicalTopic}
+          onCategoryChange={handleTopicChange}
+          onSearch={handleSearch}
+        />
+      </header>
       
-      <main className="main-content" ref={mainContentRef}>
-        <div className="news-container">
-          <h1 className="page-title">Latest Political News</h1>
-          
-          <div className="masonry-grid">
-            {politicsArticles.map((article, index) => (
-              <ArticleCard 
-                key={`${article.url}-${index}`}
-                article={article}
-                type={getArticleType(article)}
-              />
-            ))}
-          </div>
-
-          {politicsArticles.length < totalResults && (
-            <div className="load-more-container">
-              <button 
-                onClick={() => setPage(prev => prev + 1)} 
-                disabled={loading}
-                className="load-more-btn"
-              >
-                {loading ? 'Loading...' : 'Load More'}
-              </button>
-            </div>
-          )}
-        </div>
+      <main className="main-content">
+        
+        <NewsGrid 
+          articles={articles}
+          loading={loading}
+          hasMore={hasMore}
+          totalResults={totalResults}
+          onLoadMore={loadMore}
+          formatPublishedDate={formatPublishedDate}
+        />
       </main>
-
+      
       <Footer />
     </>
   );
-}
-
-// Окремий компонент для картки новини
-function ArticleCard({ article, type }) {
-  const cardRef = useRef(null);
-  const [hasImage, setHasImage] = useState(!!article.urlToImage);
-
-  return (
-    <div 
-      ref={cardRef}
-      className={`news-card ${type}`}
-      style={{ '--rows': calculateRowSpan(article) }}
-    >
-      {hasImage && (
-        <img 
-          src={article.urlToImage} 
-          alt={article.title} 
-          className="news-image"
-          onError={() => setHasImage(false)}
-        />
-      )}
-      <div className="news-content">
-        <span className="news-label">{type.toUpperCase()}</span>
-        <h3>{article.title}</h3>
-        <p>{article.description}</p>
-        <a 
-          href={article.url} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="read-more"
-        >
-          Read more →
-        </a>
-      </div>
-    </div>
-  );
-}
-
-// Функція для розрахунку висоти картки
-function calculateRowSpan(article) {
-  const titleLength = article.title?.length || 0;
-  const descLength = article.description?.length || 0;
-  const hasImage = !!article.urlToImage;
-  
-  if (descLength > 200) return hasImage ? 6 : 5;
-  if (descLength > 100) return hasImage ? 5 : 4;
-  if (titleLength > 80) return hasImage ? 4 : 3;
-  return hasImage ? 3 : 2;
 }
