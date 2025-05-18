@@ -14,11 +14,13 @@ router.post("/", (req, res) => {
     subscribers = JSON.parse(fs.readFileSync(dataPath));
   }
 
-  if (!subscribers.includes(email)) {
-    subscribers.push(email);
-    fs.writeFileSync(dataPath, JSON.stringify(subscribers, null, 2));
-    console.log("Subscribed:", email);
+  if (subscribers.includes(email)) {
+    return res.status(400).json({ error: "Цей email вже підписаний" });
   }
+
+  subscribers.push(email);
+  fs.writeFileSync(dataPath, JSON.stringify(subscribers, null, 2));
+  console.log("Subscribed:", email);
 
   res.status(200).json({ message: "Subscribed successfully" });
 });

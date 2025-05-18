@@ -5,8 +5,49 @@ import telegramIcon from "../assets/telegram.svg";
 import linkedinIcon from "../assets/linkedin.svg";
 import githubIcon from "../assets/github.svg";
 import './Footer.css';
+import { useState } from "react";
+
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+const handleSubscribe = async () => {
+  if (!email) {
+    setMessage("❗ Input your gmail");
+    return;
+  }
+
+  // Перевірка, чи це Gmail
+  if (!email.endsWith("@gmail.com")) {
+    setMessage("❗ Input your Gmail");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:3001/api/subscribe", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setMessage(`❌ ${data.error || "Error"}`);
+    } else {
+      setMessage("✅ You have successfully subscribed");
+      setEmail("");
+    }
+  } catch (err) {
+    setMessage("❌ Subscription error");
+    console.error(err);
+  }
+};
+
+
   const socialLinks = [
     { name: "Facebook", icon: facebookIcon, url: "https://facebook.com" },
     { name: "Twitter", icon: twitterIcon, url: "https://twitter.com" },
@@ -26,12 +67,15 @@ export default function Footer() {
             <div className="newsletter-group">
               <input 
                 type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email" 
                 className="newsletter-input"
               />
-              <button className="subscribe-button">
+              <button onClick={handleSubscribe}>
                 Subscribe
               </button>
+              {message && <p className="newsletter-message">{message}</p>}
             </div>
           </div>
 

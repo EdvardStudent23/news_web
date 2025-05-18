@@ -23,7 +23,7 @@ async function getLatestNewsHTML() {
     const articles = res.data.articles || [];
 
     if (!articles.length) {
-      return "<p>Сьогодні новин немає.</p>";
+      return "<p>No news today.</p>";
     }
 
     const listItems = articles
@@ -33,14 +33,14 @@ async function getLatestNewsHTML() {
       .join("\n");
 
     return `
-      <h2>📰 Сьогоднішні новини</h2>
+      <h2>📰 News Today</h2>
       <ul>
         ${listItems}
       </ul>
     `;
   } catch (error) {
-    console.error("❌ Помилка при отриманні новин:", error.message);
-    return "<p>Не вдалося отримати новини.</p>";
+    console.error("News receiving error:", error.message);
+    return "<p>Cant get news</p>";
   }
 }
 
@@ -65,13 +65,13 @@ async function sendNews() {
           subject: "Щоденні новини",
           html,
         });
-        console.log(`✅ News sent to ${email}`);
+        console.log(`News sent to ${email}`);
       } catch (err) {
-        console.error(`❌ Failed to send to ${email}:`, err.message);
+        console.error(`Failed to send to ${email}:`, err.message);
       }
     }
   } catch (err) {
-    console.error("❌ Помилка при читанні файлу підписників:", err.message);
+    console.error("Error while reading subscribers file:", err.message);
   }
 }
 
