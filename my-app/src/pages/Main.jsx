@@ -16,13 +16,13 @@ export default function Main() {
     endDate: null
   });
   const [hasMore, setHasMore] = useState(true);
-  const [showPoliticsOnly, setShowPoliticsOnly] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const endDate = new Date();
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 29);
-    
+
     setDateRange({
       startDate,
       endDate
@@ -45,12 +45,12 @@ export default function Main() {
 
   const fetchNews = useCallback(async () => {
     if (!dateRange.startDate || !dateRange.endDate || loading || !hasMore) return;
-    
+
     try {
       setLoading(true);
-      const query = 'sports OR business OR crypto OR politics';
+      const query = searchQuery || 'sports OR business OR crypto OR politics';
       const sources = 'bbc-news,cnn,fox-news,the-washington-post,the-wall-street-journal';
-      
+
       const res = await fetch(
         `https://newsapi.org/v2/everything?` +
         `q=${query}&` +
@@ -60,24 +60,25 @@ export default function Main() {
         `sortBy=publishedAt&` +
         `page=${page}&` +
         `pageSize=50&` +
-        `apiKey=c58aeb66990b4c45a3455fb28c0846a9`
+        `apiKey=17127349ad304326915fa7bd8837244d`
       );
-      
+
       const data = await res.json();
-      
+
       if (data.status === 'error') {
         console.error('API Error:', data.message);
         setHasMore(false);
         return;
       }
+
       const newArticles = (data.articles || []).filter(article => !seenUrls.has(article.url));
       if (newArticles.length < 5) {
         const newEndDate = new Date(dateRange.startDate);
         newEndDate.setDate(newEndDate.getDate() - 1);
-        
+
         const newStartDate = new Date(newEndDate);
         newStartDate.setDate(newStartDate.getDate() - 29);
-        
+
         setDateRange({
           startDate: newStartDate,
           endDate: newEndDate
@@ -99,7 +100,7 @@ export default function Main() {
     } finally {
       setLoading(false);
     }
-  }, [page, dateRange, seenUrls, loading, hasMore]);
+  }, [page, dateRange, seenUrls, loading, hasMore, searchQuery]);
 
   useEffect(() => {
     fetchNews();
@@ -109,14 +110,27 @@ export default function Main() {
     setPage(prev => prev + 1);
   };
 
+  const handleSearch = (term) => {
+    const query = term.trim().split(/\s+/).join(' AND ');
+    setArticles([]);
+    setSeenUrls(new Set());
+    setPage(1);
+    setHasMore(true);
+    setSearchQuery(query);
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 29);
+    setDateRange({ startDate, endDate });
+  };
+
   return (
     <>
       <Helmet>
         <title>Main News</title>
       </Helmet>
-      <header><Navbar /></header>
+      <header><Navbar onSearch={handleSearch} /></header>
       <main className="main-content">
-        <NewsGrid 
+        <NewsGrid
           articles={articles}
           loading={loading}
           hasMore={hasMore}
@@ -128,4 +142,4 @@ export default function Main() {
       <Footer />
     </>
   );
-} 
+}

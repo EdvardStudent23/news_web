@@ -7,7 +7,7 @@
   background-color: whitesmoke; 
   border-bottom: 3px solid black; 
   height: 80px;
-  padding: 0 7% 0 3%;
+  padding: 0 6% 0 4%;
   display: flex;
   align-items: center;
   box-shadow: none; 
@@ -17,7 +17,7 @@
 }
 
 .navbar-container {
-  width: 100%;
+  width: 110%;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -46,6 +46,33 @@
   display: flex;
   transition: all 0.3s ease;
 }
+.search-input {
+  padding: 0.5rem 0.5rem; 
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px; 
+  margin-left: 2rem;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: white;
+  width: 10rem;
+}
+
+.search-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+  .search-input {
+    margin-left: 0;
+    padding: 0.5rem; 
+  }
+  .navbar-links a {
+    font-size: 1.1rem; 
+    padding: 0.5rem;
+  }
+}
 
 .navbar-links ul {
   list-style: none;
@@ -63,15 +90,15 @@
 }
 
 .navbar-links a {
-  display: flex;
+  display: inline-flex;
   font-family: system-ui;
   align-items: center;
   height: 100%;
-  padding: 0 clamp(5px, 1vw, 20px);
+  padding: 0.25rem clamp(5px, 1vw, 20px);
   text-decoration: none;
   color: #000;
   font-weight: bold;
-  font-size: clamp(14px, 2vw, 18px);
+  font-size: 1.2rem;
   border-radius: 10px;
   transition: all 0.3s;
   white-space: nowrap;
@@ -103,7 +130,7 @@
 }
 
 .burger-menu.open span {
-  background-color: #fff;
+  background-color: #000000;
 }
 
 .burger-menu.open span:nth-child(1) {
@@ -128,8 +155,11 @@
   .burger-menu {
     display: flex;
   }
-  
+.body.menu-open{
+  overflow: hidden;
+}
   .navbar-links {
+    overflow: hidden;
     position: fixed;
     top: 0;
     left: 0;
