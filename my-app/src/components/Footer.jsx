@@ -13,7 +13,7 @@ export default function Footer() {
     { name: "Instagram", icon: instagramIcon, url: "https://instagram.com" },
     { name: "Telegram", icon: telegramIcon, url: "https://telegram.org" },
     { name: "LinkedIn", icon: linkedinIcon, url: "https://linkedin.com" },
-    { name: "GitHub", icon: githubIcon, url: "https://github.com" },
+    { name: "GitHub", icon: githubIcon, url: "https://github.com/EdvardStudent23/news_web.git" },
   ];
 
   return (

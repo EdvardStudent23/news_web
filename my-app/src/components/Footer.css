@@ -95,7 +95,9 @@
 .legal-links a:hover {
   color: #3498db;
 }
-
+p{
+  color: #bdc3c7;
+}
 @media (max-width: 768px) {
   .footer-row {
     flex-direction: column;

@@ -5,24 +5,26 @@
   box-sizing: border-box;
 }
 
-/* Creating a masonry-style grid layout */
+
 .masonry-grid {
-  column-count: 4; /* Adjust number of columns based on viewport */
-  column-gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
   width: 100%;
+  grid-auto-flow: dense;
 }
 
 .news-card {
-  break-inside: avoid; /* Prevents cards from breaking across columns */
-  margin-bottom: 20px; /* Space between cards vertically */
   background: white;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 3px 10px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
-  display: inline-block; /* Important for masonry layout */
+  display: flex;
+  flex-direction: column;
   width: 100%;
   box-sizing: border-box;
+  height: fit-content;
 }
 
 .news-card:hover {
@@ -33,12 +35,14 @@
   width: 100%;
   height: auto;
   object-fit: cover;
+  max-height: 200px;
 }
 
 .news-content {
   padding: 15px;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .news-label {
@@ -70,6 +74,22 @@ h3 {
   line-height: 1.4;
 }
 
+.news-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.published-date {
+  font-style: italic;
+}
+
+.news-source {
+  font-weight: bold;
+}
+
 p {
   font-size: 0.9rem;
   line-height: 1.5;
@@ -89,7 +109,6 @@ p {
   text-decoration: underline;
 }
 
-/* Special styles for types */
 .news-card.highlight {
   border-left: 5px solid #ffa502;
 }
@@ -102,7 +121,6 @@ p {
   background: #f1f2f6;
 }
 
-/* Card variation styles */
 .news-card.highlight img {
   max-height: 220px;
 }
@@ -111,7 +129,27 @@ p {
   font-size: 1.3rem;
 }
 
-/* Load more button */
+
+.date-range-indicator {
+  background: #f8f9fa;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: #555;
+  border-left: 4px solid #3498db;
+}
+
+.end-of-results, .no-results {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+  background: #f8f9fa;
+  border-radius: 6px;
+  margin-top: 20px;
+}
+
 .load-more-container {
   text-align: center;
   padding: 20px 0;
@@ -137,21 +175,33 @@ p {
   cursor: not-allowed;
 }
 
-/* Responsive Design */
+/* Special card types to create visual variety */
+.news-card.highlight {
+  grid-column: span 2; /* Makes highlighted cards span 2 columns */
+}
+
+/* On smaller screens, don't span multiple columns */
+@media (max-width: 767px) {
+  .news-card.highlight {
+    grid-column: span 1;
+  }
+}
+
+/* Media queries for responsive design */
 @media (max-width: 1200px) {
   .masonry-grid {
-    column-count: 3;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
 }
 
 @media (max-width: 900px) {
   .masonry-grid {
-    column-count: 2;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   }
 }
 
 @media (max-width: 600px) {
   .masonry-grid {
-    column-count: 1;
+    grid-template-columns: 1fr;
   }
 }
