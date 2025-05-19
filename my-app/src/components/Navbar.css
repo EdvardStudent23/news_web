@@ -108,7 +108,6 @@
   text-decoration: underline;
 }
 
-/* Бургер-меню */
 .burger-menu {
   display: none;
   flex-direction: column;
@@ -146,7 +145,7 @@
 }
 
 /* Мобільна версія */
-@media (max-width: 768px) {
+@media (max-width: 880px) {
   .navbar {
     height: 80px;
     padding: 0 5%;

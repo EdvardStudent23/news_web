@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 
 const NewsGrid = ({ 
   articles,
@@ -27,21 +27,18 @@ const NewsGrid = ({
             className={`news-card ${getCardEmphasis(article, index)}`}
           >
             {article.urlToImage && (
-              <img
-                src={article.urlToImage}
-                alt={article.title}
-                className="news-image"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                }}
-              />
+              <div className="news-image-container">
+                <img
+                  src={article.urlToImage}
+                  alt={article.title}
+                  className="news-image"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
             )}
             <div className="news-content">
-              {Math.random() > 0.5 && (
-                <span className="news-label">
-                  СПОРТ
-                </span>
-              )}
               <h3>{article.title}</h3>
               <p>{article.description}</p>
               <div className="news-meta">
@@ -54,7 +51,7 @@ const NewsGrid = ({
                 rel="noopener noreferrer"
                 className="read-more"
               >
-                Read More →
+                More details →
               </a>
             </div>
           </div>
@@ -67,20 +64,20 @@ const NewsGrid = ({
             className="load-more-btn"
             disabled={loading}
           >
-            {loading ? 'Завантаження...' : 'Завантажити більше'}
+            {loading ? 'Loading...' : 'Load more'}
           </button>
         </div>
       )}
       
       {!hasMore && articles.length > 0 && (
         <div className="end-of-results">
-          All available news loaded
+          All available news is loaded.
         </div>
       )}
       
       {articles.length === 0 && !loading && (
         <div className="no-results">
-          Loading news... If nothing appears within a minute, try reloading the page.
+          Loading news ...
         </div>
       )}
     </div>
