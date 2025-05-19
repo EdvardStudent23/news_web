@@ -1,0 +1,14 @@
+.news-block{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Image-icon {
+    width: 40%;
+    height: 40%;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 16px;
+  }
+
